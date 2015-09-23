@@ -16,8 +16,9 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 import cv2
 from into import into
-from dask.array.into import discover
-from dask.array import Array
+#from dask.array.into import discover
+#from dask.array import Array
+import dask.array as da
 import math
 import csnmf.snmf
 from csnmf.third_party import mrnmf
@@ -29,7 +30,7 @@ def test_movie(hdf_filename, base_output_name, ncols=None, interval=None,
 
     f = h5py.File(hdf_filename, 'r')
     img_shape = np.array(f['img_shape'], dtype=np.int)
-    f.close()
+    #f.close()
 
     m = min(max_blockshape[0], reduce(mul, img_shape))
     if interval is not None:
@@ -38,10 +39,12 @@ def test_movie(hdf_filename, base_output_name, ncols=None, interval=None,
         n = max_blockshape[1]
     m = int(m)
     n = int(n)
-    data = into(Array, hdf_filename + '::/data', blockshape=(m, n))
+    #data = into(Array, hdf_filename + '::/data', blockshape=(m, n))
+    #data = into(Array, f['data'], blockshape=(m, n))
+    data  = da.from_array(f['data'],chunks=(m,n))
     if interval is not None:
         data = data[:, interval[0]:interval[1]]
-        data = np.array(data)
+        data = np.array(data.compute())
 
     if ncols is None:
         ncols = data.shape[1] / 120
@@ -134,10 +137,10 @@ def test_movie(hdf_filename, base_output_name, ncols=None, interval=None,
 def process_elephant_dreams(resolution, interval=None, ncols=None,
                             create_matrix=False):
     if create_matrix:
-        prefix = '/Volumes/MyBookDuo/movies/ED-{0:d}'.format(resolution)
+        prefix = '/home/ismav/prog/csnmf/csnmf/tests/ED-{0:d}'.format(resolution)
         png_movie_to_hdf5_matrix(prefix + '-png/', (1, 15692), prefix + '.hdf5')
 
-    prefix = '/Volumes/MyBookDuo/movies/ED-{0:d}'.format(resolution)
+    prefix = '/home/ismav/prog/csnmf/csnmf/tests/ED-{0:d}'.format(resolution)
     base_output_name = 'elephantDreams_{0:d}p'.format(resolution)
     if interval is not None:
         base_output_name += '_{0:05d}_{1:05d}'.format(*interval)
@@ -147,12 +150,12 @@ def process_elephant_dreams(resolution, interval=None, ncols=None,
 
 
 if __name__ == '__main__':
-    process_elephant_dreams(360, interval=(600, 720), ncols=6)
-    process_elephant_dreams(360, interval=(600, 720), ncols=9)
-    process_elephant_dreams(360, interval=(600, 720), ncols=15)
+    #process_elephant_dreams(360, interval=(600, 720), ncols=6)
+    #process_elephant_dreams(360, interval=(600, 720), ncols=9)
+    #process_elephant_dreams(360, interval=(600, 720), ncols=15)
 
-    # These two tests take a LONG time to run
+    ## These two tests take a LONG time to run
     process_elephant_dreams(360)
-    process_elephant_dreams(1080)
+    #process_elephant_dreams(1080)
 
     plt.show()

@@ -17,15 +17,15 @@ import csnmf.tsqr
 def regular_blocks():
     m, n = 1000, 20
     mat = np.random.rand(m, n)
-    blockshape = (200, n)
-    return mat, da.from_array(mat, blockshape=blockshape, name='A')
+    chunks = (200, n)
+    return mat, da.from_array(mat, chunks=chunks, name='A')
 
 
 def irregular_blocks():
     m, n = 1000, 20
     mat = np.random.rand(m, n)
-    blockdims = [(200, 100, 300, 50, 150, 200), (1,)]
-    return mat, da.from_array(mat, blockdims=blockdims, name='A')
+    chunks = [(200, 100, 300, 50, 150, 200), (1,)]
+    return mat, da.from_array(mat, chunks=chunks, name='A')
 
 
 def test_tsqr(create_func):
@@ -34,8 +34,8 @@ def test_tsqr(create_func):
 
     q, r = csnmf.tsqr.qr(data)
 
-    dot_graph(q.dask, filename='q')
-    dot_graph(r.dask, filename='r')
+    #dot_graph(q.dask, filename='q')
+    #dot_graph(r.dask, filename='r')
 
     print q.shape
     q = np.array(q)

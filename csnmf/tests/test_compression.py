@@ -13,6 +13,7 @@ from dask.array import from_array
 import timeit
 import matplotlib.pyplot as plt
 import csnmf.compression as randcomp
+from gauss_sim import Random_Projection
 
 
 def select_blocksize(k):
@@ -31,14 +32,20 @@ def compression_vs_qr(m, n, q):
     np.linalg.qr(x)
     tim_qr = timeit.default_timer() - t
 
-    return tim_comp, tim_qr
+    t = timeit.default_timer()
+    randcomp.compress(x, q, n_power_iter=0)
+    tim_our = timeit.default_timer() - t
+
+    return tim_comp, tim_qr, tim_our
 
 
 def test_compression_vs_qr(only_draw=False):
 
     m = int(1e4)
     sizes_n = map(int, [1e2, 3e2, 5e2, 7.5e2,
-                        1e3, 3e3, 5e3, 7.5e3])
+                        1e3, 3e3,])
+    #sizes_n = map(int, [1e2, 3e2, 5e2, 7.5e2,
+    #                    1e3, 3e3, 5e3, 7.5e3])
 
     repetitions = 1
 
@@ -99,7 +106,7 @@ def size_timing(m, n, q):
     x = np.random.standard_normal(size=(m, n))
 
     blockshape = (select_blocksize(m), select_blocksize(n))
-    data = from_array(x, blockshape=blockshape)
+    data = from_array(x, chunks=blockshape)
 
     t = timeit.default_timer()
     data_comp, _ = randcomp.compress(data, q)
@@ -171,6 +178,6 @@ def test_compression_ic_vs_ooc(only_draw=False):
     plt.savefig('test_compression_ic_vs_ooc.pdf')
 
 if __name__ == '__main__':
-    test_compression_ic_vs_ooc(only_draw=False)
+    #test_compression_ic_vs_ooc(only_draw=False)
     test_compression_vs_qr(only_draw=False)
     plt.show()

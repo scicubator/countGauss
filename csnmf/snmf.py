@@ -14,7 +14,6 @@ from csnmf.third_party import mrnmf
 import csnmf.compression
 import csnmf.tsqr
 
-
 def _compute_colnorms(data):
     """
     Compute the L1 norm for each column
@@ -56,7 +55,8 @@ def compute(data, ncols, alg, compress=False, n_power_iter=0):
      - relative error of the approximation
     """
     if compress:
-        data_comp, _ = csnmf.compression.compress(data, ncols, n_power_iter)
+        #data_comp, _ = csnmf.compression.compress(data, ncols, n_power_iter, our=False)
+        data_comp, _ = csnmf.compression.compress(data, ncols, n_power_iter, our=True)
     else:
         if isinstance(data, da.Array):
             _, data_comp = csnmf.tsqr.qr(data)

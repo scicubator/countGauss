@@ -53,13 +53,15 @@ def run(m, n, q, ncols, blockshape):
 
     algorithms = ['SPA', 'XRAY']
     compress = [False, True]
-    data_list = [mat, da.from_array(mat, blockshape=blockshape)]
+    data_list = [mat, da.from_array(mat, chunks=blockshape)]
 
     base_str = 'algorithm: {alg:4s}; compressed: {comp:d}; ' \
                'type: {data_type:11s}; error {error:.4f}; time {time:.2f}'
 
     for alg, comp, data in itertools.product(algorithms, compress, data_list):
 
+        import ipdb
+        ipdb.set_trace()
         t = timeit.default_timer()
         cols, _, error = csnmf.snmf.compute(data, ncols, alg, compress=comp)
         t = timeit.default_timer() - t

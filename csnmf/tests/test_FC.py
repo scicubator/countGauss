@@ -89,7 +89,7 @@ def plot(x, dict_res, plot_func):
     plt.hold(False)
 
 
-def test_climate(filename, plot_func, q_max=11, compute_qr_until=11,
+def test_FC(filename, plot_func, q_max=11, compute_qr_until=11,
                  only_draw=False):
 
     test_name = 'test_' + filename
@@ -99,10 +99,30 @@ def test_climate(filename, plot_func, q_max=11, compute_qr_until=11,
 
     if not only_draw:
 
-        f = scipy.io.loadmat('../data/' + filename + '.mat')
-        data = f['A']
+        #f = scipy.io.loadmat('../data/' + filename + '.mat')
+        #data = f['A']
+        #n = data.shape[1]
+        #blockshape = (int(1e3), n)
+
+        #f=open(filename+'.txt')
+        #n=3226
+        #m=22
+        #d=f.readlines()
+        #X=np.zeros((n,m))
+        #for i in range(n):
+        #    X[i] = np.array([np.exp(float(x)) for j,x in enumerate(d[i].split("\t")) if j])
+        #X = X.T
+        #for j in range(m):
+        #    X[j,:] = X[j,:]/np.sum(X[j,:])
+
+        D=open(filename+".txt").readlines()
+        D = [x.strip().split(" ")[1:] for x in D]
+        data=np.array(D,dtype=float)
+
         n = data.shape[1]
-        blockshape = (int(1e3), n)
+        blockshape=(int(1e3), n)
+        #import ipdb
+        #ipdb.set_trace()
 
         time_vecs = {}
         err_vecs = {}
@@ -166,7 +186,9 @@ def test_climate(filename, plot_func, q_max=11, compute_qr_until=11,
 
 if __name__ == '__main__':
     plt.switch_backend('TkAgg')  # otherwise, monospace fonts do not work in mac
-    test_climate('air_mon', plt.plot, only_draw=False)
+    test_FC('FC_40k', plt.plot, only_draw=False)
+    #test_climate('air_mon', plt.plot, only_draw=False)
+
     #test_climate('air_day', plt.semilogy, q_max=11, compute_qr_until=2,
     #             only_draw=False)
     plt.show()

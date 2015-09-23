@@ -41,7 +41,8 @@ def spa(data, r, colnorms):
     cols = []
     m, n = x.shape
     for _ in xrange(r):
-        col_norms = np.linalg.norm(x, ord='fro', axis=0)
+        #col_norms = np.linalg.norm(x, ord='fro', axis=0)
+        col_norms = np.linalg.norm(x,axis=0)
         col_ind = np.argmax(col_norms)
         cols.append(col_ind)
         col = np.atleast_2d(x[:, col_ind]) #col is a row vector
@@ -67,8 +68,9 @@ def xray(x, r):
         # Loop until we choose a column that has not been selected.
         while True:
             p = np.random.random((1, x.shape[0]))
-            scores = np.linalg.norm(np.dot(R.T, x), ord='fro', axis=0)
-            scores /= np.dot(p, x)
+            #scores = np.linalg.norm(np.dot(R.T, x), ord='fro', axis=0)
+            scores = np.linalg.norm(np.dot(R.T, x), axis=0)
+            scores /= np.reshape(np.dot(p, x),len(scores))
             scores[cols] = -1   # IMPORTANT
             best_col = np.argmax(scores)
             if best_col in cols:
