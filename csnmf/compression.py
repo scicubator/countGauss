@@ -36,8 +36,21 @@ def compress(data, q, n_power_iter=0, our=False):
     n = data.shape[1]
     comp_level = compression_level(n, q)
 
+<<<<<<< HEAD
     if our:
         return _our_compress(data,comp_level)
+=======
+    if isinstance(data, np.ndarray):
+        omega = np.random.standard_normal(size=(n, comp_level))
+        qr = np.linalg.qr
+    elif isinstance(data, da.Array):
+        omega = da.random.standard_normal(size=(n, comp_level),
+                                          chunks=(data.chunks[1],
+                                                     (comp_level,)))
+        qr = csnmf.tsqr.qr
+    else:
+        raise TypeError('Cannot compress data of type ' + type(data).__name__)
+>>>>>>> 8d20e4c9e08fbe9ad5e03aec8e5b9ec957d1a54f
 
     else:
         if isinstance(data, np.ndarray):

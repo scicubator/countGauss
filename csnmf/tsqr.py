@@ -47,7 +47,10 @@ def qr(data, name=None):
     """
     if not (data.ndim == 2 and                    # Is a matrix
             len(data.chunks[1]) == 1):         # Only one column block
+<<<<<<< HEAD
             #len(data.blockdims[1]) == 1):         # Only one column block
+=======
+>>>>>>> 8d20e4c9e08fbe9ad5e03aec8e5b9ec957d1a54f
         raise ValueError(
             "Input must have the following properites:\n"
             "  1. Have two dimensions\n"
@@ -58,7 +61,10 @@ def qr(data, name=None):
 
     m, n = data.shape
     numblocks = (len(data.chunks[0]), 1)
+<<<<<<< HEAD
     #numblocks = (len(data.blockdims[0]), 1)
+=======
+>>>>>>> 8d20e4c9e08fbe9ad5e03aec8e5b9ec957d1a54f
 
     name_qr_st1 = prefix + 'QR_st1'
     dsk_qr_st1 = da.core.top(np.linalg.qr, name_qr_st1, 'ij', data.name, 'ij',
@@ -89,7 +95,10 @@ def qr(data, name=None):
     dsk_q_st2_aux = {(name_q_st2_aux, 0, 0): (operator.getitem,
                                               (name_qr_st2, 0, 0), 0)}
     q2_block_sizes = [min(e, n) for e in data.chunks[0]]
+<<<<<<< HEAD
     #q2_block_sizes = [min(e, n) for e in data.blockdims[0]]
+=======
+>>>>>>> 8d20e4c9e08fbe9ad5e03aec8e5b9ec957d1a54f
     block_slices = [(slice(e[0], e[1]), slice(0, n))
                     for e in _cumsum_blocks(q2_block_sizes)]
     name_q_st2 = prefix + 'Q_st2'
@@ -125,8 +134,12 @@ def qr(data, name=None):
     dsk_r.update(dsk_r_st2)
 
     q = da.Array(dsk_q, name_q_st3, shape=data.shape, chunks=data.chunks)
+<<<<<<< HEAD
     #q = da.Array(dsk_q, name_q_st3, shape=data.shape, blockdims=data.blockdims)
     r = da.Array(dsk_r, name_r_st2, shape=(n, n), chunks=(n, n))
     #r = da.Array(dsk_r, name_r_st2, shape=(n, n), blockshape=(n, n))
+=======
+    r = da.Array(dsk_r, name_r_st2, shape=(n, n), chunks=(n, n))
+>>>>>>> 8d20e4c9e08fbe9ad5e03aec8e5b9ec957d1a54f
 
     return q, r

@@ -41,11 +41,16 @@ def spa(data, r, colnorms):
     cols = []
     m, n = x.shape
     for _ in xrange(r):
+<<<<<<< HEAD
         #col_norms = np.linalg.norm(x, ord='fro', axis=0)
         col_norms = np.linalg.norm(x,axis=0)
+=======
+        col_norms = np.linalg.norm(x, ord=2, axis=0)
+        col_norms[cols] = -1
+>>>>>>> 8d20e4c9e08fbe9ad5e03aec8e5b9ec957d1a54f
         col_ind = np.argmax(col_norms)
         cols.append(col_ind)
-        col = np.atleast_2d(x[:, col_ind]) #col is a row vector
+        col = np.atleast_2d(x[:, col_ind])  # col is a row vector
         x = np.dot(np.eye(m) - np.dot(col.T, col) / col_norms[col_ind], x)
 
     return cols
@@ -68,9 +73,14 @@ def xray(x, r):
         # Loop until we choose a column that has not been selected.
         while True:
             p = np.random.random((1, x.shape[0]))
+<<<<<<< HEAD
             #scores = np.linalg.norm(np.dot(R.T, x), ord='fro', axis=0)
             scores = np.linalg.norm(np.dot(R.T, x), axis=0)
             scores /= np.reshape(np.dot(p, x),len(scores))
+=======
+            scores = np.linalg.norm(np.dot(R.T, x), ord=2, axis=0)
+            scores /= np.squeeze(np.dot(p, x))
+>>>>>>> 8d20e4c9e08fbe9ad5e03aec8e5b9ec957d1a54f
             scores[cols] = -1   # IMPORTANT
             best_col = np.argmax(scores)
             if best_col in cols:

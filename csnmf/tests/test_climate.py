@@ -23,7 +23,10 @@ def run(mat, ncols, blockshape, compute_qr_until):
 
     algorithms = ['SPA', 'XRAY']
     compress = [False, True]
+<<<<<<< HEAD
     #data_list = [mat, da.from_array(mat, blockshape=blockshape)]
+=======
+>>>>>>> 8d20e4c9e08fbe9ad5e03aec8e5b9ec957d1a54f
     data_list = [mat, da.from_array(mat, chunks=blockshape)]
 
     base_str = 'algorithm: {alg:4s}; compressed: {comp:d}; ' \
