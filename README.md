@@ -6,12 +6,6 @@ Finally, we also compare with TSQR implementation of Benson and Gleich, 2014.
 Our projection operator is in the spiral wht package directory. 
 
 
-The csnmf project contains the separable NMF code corresponding to the paper:
-
-    Mariano Tepper and Guillermo Sapiro, Compressed Nonnegative
-    Matrix Factorization is Fast and Accurate, 2015.
-
-If you use this software, please cite the paper.
 
 Dependencies:
 numpy
