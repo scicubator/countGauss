@@ -7,6 +7,8 @@ from Cython.Distutils import build_ext
 import numpy
 
 setup(
+    name="projection_fcube",
+    version="0.1",
     cmdclass = {'build_ext': build_ext},
     ext_modules = [Extension("anchor_new",
                              sources=["anchor_new.pyx", "c_anchor.c"],

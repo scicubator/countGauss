@@ -1139,7 +1139,7 @@ static char __pyx_k_fwht_spiral[] = "fwht_spiral";
 static char __pyx_k_RuntimeError[] = "RuntimeError";
 static char __pyx_k_ndarray_is_not_C_contiguous[] = "ndarray is not C contiguous";
 static char __pyx_k_anchor_new_pyx_simple_cython_te[] = "\nanchor_new.pyx\n\nsimple cython test of accessing a numpy array's data\n\nthe C function: anchor_fast computes fast walsh-hadamard transform for 2-d array, in place.\n\n";
-static char __pyx_k_home_ismav_prog_csnmf_spiral_wh[] = "/home/ismav/prog/csnmf/spiral-wht-1.8/anchor_new.pyx";
+static char __pyx_k_home_ismav_prog_f3NMF_spiral_wh[] = "/home/ismav/prog/f3NMF/spiral-wht-1.8/anchor_new.pyx";
 static char __pyx_k_unknown_dtype_code_in_numpy_pxd[] = "unknown dtype code in numpy.pxd (%d)";
 static char __pyx_k_Format_string_allocated_too_shor[] = "Format string allocated too short, see comment in numpy.pxd";
 static char __pyx_k_Non_native_byte_order_not_suppor[] = "Non-native byte order not supported";
@@ -1156,7 +1156,7 @@ static PyObject *__pyx_n_s_ValueError;
 static PyObject *__pyx_n_s_W;
 static PyObject *__pyx_n_s_anchor_new;
 static PyObject *__pyx_n_s_fwht_spiral;
-static PyObject *__pyx_kp_s_home_ismav_prog_csnmf_spiral_wh;
+static PyObject *__pyx_kp_s_home_ismav_prog_f3NMF_spiral_wh;
 static PyObject *__pyx_n_s_import;
 static PyObject *__pyx_n_s_m;
 static PyObject *__pyx_n_s_main;
@@ -3582,7 +3582,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_W, __pyx_k_W, sizeof(__pyx_k_W), 0, 0, 1, 1},
   {&__pyx_n_s_anchor_new, __pyx_k_anchor_new, sizeof(__pyx_k_anchor_new), 0, 0, 1, 1},
   {&__pyx_n_s_fwht_spiral, __pyx_k_fwht_spiral, sizeof(__pyx_k_fwht_spiral), 0, 0, 1, 1},
-  {&__pyx_kp_s_home_ismav_prog_csnmf_spiral_wh, __pyx_k_home_ismav_prog_csnmf_spiral_wh, sizeof(__pyx_k_home_ismav_prog_csnmf_spiral_wh), 0, 0, 1, 0},
+  {&__pyx_kp_s_home_ismav_prog_f3NMF_spiral_wh, __pyx_k_home_ismav_prog_f3NMF_spiral_wh, sizeof(__pyx_k_home_ismav_prog_f3NMF_spiral_wh), 0, 0, 1, 0},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
   {&__pyx_n_s_m, __pyx_k_m, sizeof(__pyx_k_m), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
@@ -3685,7 +3685,7 @@ static int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__7 = PyTuple_Pack(6, __pyx_n_s_W, __pyx_n_s_B, __pyx_n_s_G, __pyx_n_s_P, __pyx_n_s_m, __pyx_n_s_n); if (unlikely(!__pyx_tuple__7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 21; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__7);
   __Pyx_GIVEREF(__pyx_tuple__7);
-  __pyx_codeobj__8 = (PyObject*)__Pyx_PyCode_New(4, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__7, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_ismav_prog_csnmf_spiral_wh, __pyx_n_s_fwht_spiral, 21, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 21; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__8 = (PyObject*)__Pyx_PyCode_New(4, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__7, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_ismav_prog_f3NMF_spiral_wh, __pyx_n_s_fwht_spiral, 21, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 21; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;

@@ -11,7 +11,7 @@ from __future__ import absolute_import, print_function
 import numpy as np
 import dask.array as da
 import csnmf.tsqr
-from gauss_sim import Random_Projection
+from fcube.fcube import fcube_projection, mic_projection
 
 def compression_level(n, q):
     return min(max(20, q + 10), n)
@@ -27,7 +27,7 @@ def _inner_compress(data, omega, n_power_iter=0, qr=np.linalg.qr):
 
 def _our_compress(data, comp_level):
      seed = np.random.randint(1000)
-     M    = Random_Projection(data.T, comp_level, seed=seed)
+     M    = fcube_projection(data.T, comp_level, seed=seed)
      tmp  = 0
      return M.T, tmp
 
@@ -36,21 +36,8 @@ def compress(data, q, n_power_iter=0, our=False):
     n = data.shape[1]
     comp_level = compression_level(n, q)
 
-<<<<<<< HEAD
     if our:
         return _our_compress(data,comp_level)
-=======
-    if isinstance(data, np.ndarray):
-        omega = np.random.standard_normal(size=(n, comp_level))
-        qr = np.linalg.qr
-    elif isinstance(data, da.Array):
-        omega = da.random.standard_normal(size=(n, comp_level),
-                                          chunks=(data.chunks[1],
-                                                     (comp_level,)))
-        qr = csnmf.tsqr.qr
-    else:
-        raise TypeError('Cannot compress data of type ' + type(data).__name__)
->>>>>>> 8d20e4c9e08fbe9ad5e03aec8e5b9ec957d1a54f
 
     else:
         if isinstance(data, np.ndarray):
