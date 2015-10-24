@@ -3,10 +3,11 @@ import numpy as np
 from fht import fht
 from time import time
 import pylab as plt
+#import seaborn as sns
 from lshash import LSHash
 from csnmf.third_party.mrnmf.nmf_process_algorithms import xray,spa
 from csnmf.compression import compress
-from fcube.fcube import fcube_projection, mic_projection
+from fcube.fcube import fcube_projection, mic_projection, count_projection
 
 def gauss_sim(X,k,maxiter=10, alg='gauss'):
     m,n  = np.shape(X)
@@ -19,6 +20,8 @@ def gauss_sim(X,k,maxiter=10, alg='gauss'):
             Z    = fcube_projection(X,k)
         if alg == 'mic':
             Z    = mic_projection(X,k)
+        if alg == 'count':
+            Z    = count_projection(X,k)
         if alg == 'hash':
             if iT == 0:
                 lsh  = LSHash(20,n)
@@ -39,17 +42,19 @@ def gauss_sim(X,k,maxiter=10, alg='gauss'):
 if __name__ == '__main__':
     r   =  200
     m   =  400
-    maxiter = 4
+    #maxiter = 4
+    maxiter = 1
 
     #n   =  4096
     two_L =  8
-    two_U =  15
+    two_U =  18
     FF    = np.zeros(len(range(two_L,two_U)))
     GP    = np.zeros(len(range(two_L,two_U)))
     HM    = np.zeros(len(range(two_L,two_U)))
     SP    = np.zeros(len(range(two_L,two_U)))
     XR    = np.zeros(len(range(two_L,two_U)))
     SC    = np.zeros(len(range(two_L,two_U)))
+    CG    = np.zeros(len(range(two_L,two_U)))
     iT    = 0
     nList =  [np.power(2,i) for i in range(two_L,two_U)]
     for n in nList:
@@ -61,11 +66,6 @@ if __name__ == '__main__':
 
         X   =  np.dot(U,V)
 
-        t0  = time()
-        I_f   =  gauss_sim(X,r,maxiter,alg='fastfood')
-        dur = time() - t0
-        FF[iT] = dur
-        print "fast food took", dur, " seconds \n"
 
         t0  = time()
         I_g   =  gauss_sim(X,r,maxiter,alg='gauss')
@@ -74,16 +74,28 @@ if __name__ == '__main__':
         print "Gaussian proj took", dur, " seconds \n"
 
         t0  = time()
-        I_m   =  gauss_sim(X,r,maxiter,alg='mic')
-        dur = time() - t0
-        HM[iT] = dur
-        print "Michael took", dur, " seconds \n"
-
-        t0  = time()
         I_m   =  compress(X,r,0)
         dur = time() - t0
         SC[iT] = dur
         print "Mariano took", dur, " seconds \n"
+
+        t0  = time()
+        I_f   =  gauss_sim(X,r,maxiter,alg='fastfood')
+        dur = time() - t0
+        FF[iT] = dur
+        print "fast food took", dur, " seconds \n"
+
+        t0  = time()
+        I_f   =  gauss_sim(X,r,maxiter,alg='count')
+        dur = time() - t0
+        CG[iT] = dur
+        print "Count sketch took", dur, " seconds \n"
+        #t0  = time()
+        #I_m   =  gauss_sim(X,r,maxiter,alg='mic')
+        #dur = time() - t0
+        #HM[iT] = dur
+        #print "Michael took", dur, " seconds \n"
+
         #t0  = time()
         #I_s   =  spa(X,r,None)
         #dur = time() - t0
@@ -98,16 +110,22 @@ if __name__ == '__main__':
 
         iT += 1
     x = range(two_U-two_L)
+    y = ['$2^'+str(i)+'$' for i in range(two_L,two_U)]
 
     plt.ion()
     plt.plot(x,GP,'gs--')
-    plt.plot(x,FF,'bo--')
-    plt.plot(x,HM,'ro--')
     plt.plot(x,SC,'k+--')
-    plt.xticks(x,[str(label) for label in nList],rotation='horizontal', fontsize=20)
-    plt.legend(('Gaussian','FastFood', 'Michael', 'Mariano'), fontsize=22)
-    plt.title('Number of Anchors and Samples are %s, %s'%(str(r), str(m)), fontsize=25)
-    plt.xlabel('Dimension of data', fontsize=22)
-    plt.ylabel('Running times', fontsize=22)
+    plt.plot(x,FF,'bo--')
+    plt.plot(x,CG,'ro--')
+    #plt.plot(x,HM,'ro--')
+    #plt.xticks(x,[str(label) for label in nList], rotation='horizontal', fontsize=30)
+    plt.xticks(x,["$2^"+"{" + str(i)+ "}"+ "$" for i in range(two_L, two_U)], rotation='horizontal', fontsize=30)
+    plt.yticks(fontsize=30)
+    #ax.xticks(y,rotation='horizontal', fontsize=20)
+    plt.legend(('GP','SC', 'F$^3$', 'CG'), fontsize=45, loc='upper left')
+    plt.title('Anchors: %s,  Samples: %s'%(str(r), str(m)), fontsize=50)
+    plt.xlabel('Dimension of data', fontsize=45)
+    plt.ylabel('Running times (seconds)', fontsize=45)
     plt.show(True)
     #plt.savefig('comp_GP_FF.png')
+    #plt.savefig('figures/fcube_GP_SC.pdf',transparent=False, bbox_inches='tight', pad_inches=0)
