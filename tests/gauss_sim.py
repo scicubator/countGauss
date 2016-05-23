@@ -7,7 +7,7 @@ import pylab as plt
 from lshash import LSHash
 from csnmf.third_party.mrnmf.nmf_process_algorithms import xray,spa
 from csnmf.compression import compress
-from fcube.fcube import fcube_projection, countGauss_projection, countSketch_projection
+from fcube.fcube import countGauss_projection, countSketch_projection
 
 def gauss_sim(X,k,maxiter=10, alg='gauss'):
     m,n  = np.shape(X)
@@ -16,8 +16,6 @@ def gauss_sim(X,k,maxiter=10, alg='gauss'):
         if alg == 'gauss':
             G    = np.random.randn(n,k)
             Z    = np.dot(X,G)
-        if alg == 'fastfood':
-            Z    = fcube_projection(X,k)
         if alg == 'countGauss':
             Z    = countGauss_projection(X,k)
         if alg == 'countSketch':
@@ -90,11 +88,6 @@ if __name__ == '__main__':
         dur = time() - t0
         CG[iT] = dur
         print "Count sketch took", dur, " seconds \n"
-        #t0  = time()
-        #I_m   =  gauss_sim(X,r,maxiter,alg='mic')
-        #dur = time() - t0
-        #HM[iT] = dur
-        #print "Michael took", dur, " seconds \n"
 
         #t0  = time()
         #I_s   =  spa(X,r,None)
