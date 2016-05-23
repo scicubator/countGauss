@@ -7,7 +7,7 @@ import pylab as plt
 from lshash import LSHash
 from csnmf.third_party.mrnmf.nmf_process_algorithms import xray,spa
 from csnmf.compression import compress
-from fcube.fcube import fcube_projection, mic_projection, count_projection
+from fcube.fcube import fcube_projection, countGauss_projection, countSketch_projection
 
 def gauss_sim(X,k,maxiter=10, alg='gauss'):
     m,n  = np.shape(X)
@@ -18,10 +18,10 @@ def gauss_sim(X,k,maxiter=10, alg='gauss'):
             Z    = np.dot(X,G)
         if alg == 'fastfood':
             Z    = fcube_projection(X,k)
-        if alg == 'mic':
-            Z    = mic_projection(X,k)
-        if alg == 'count':
-            Z    = count_projection(X,k)
+        if alg == 'countGauss':
+            Z    = countGauss_projection(X,k)
+        if alg == 'countSketch':
+            Z    = countSketch_projection(X,k)
         if alg == 'hash':
             if iT == 0:
                 lsh  = LSHash(20,n)
@@ -73,20 +73,20 @@ if __name__ == '__main__':
         GP[iT] = dur
         print "Gaussian proj took", dur, " seconds \n"
 
-        t0  = time()
-        I_m   =  compress(X,r,0)
-        dur = time() - t0
-        SC[iT] = dur
-        print "Mariano took", dur, " seconds \n"
+        #t0  = time()
+        #I_m   =  compress(X,r,0)
+        #dur = time() - t0
+        #SC[iT] = dur
+        #print "Mariano took", dur, " seconds \n"
 
         t0  = time()
-        I_f   =  gauss_sim(X,r,maxiter,alg='fastfood')
+        I_f   =  gauss_sim(X,r,maxiter,alg='countGauss')
         dur = time() - t0
         FF[iT] = dur
-        print "fast food took", dur, " seconds \n"
+        print "Count Gauss took", dur, " seconds \n"
 
         t0  = time()
-        I_f   =  gauss_sim(X,r,maxiter,alg='count')
+        I_f   =  gauss_sim(X,r,maxiter,alg='countSketch')
         dur = time() - t0
         CG[iT] = dur
         print "Count sketch took", dur, " seconds \n"
@@ -112,20 +112,26 @@ if __name__ == '__main__':
     x = range(two_U-two_L)
     y = ['$2^'+str(i)+'$' for i in range(two_L,two_U)]
 
+
+    FS=60
+    MS=30
     plt.ion()
-    plt.plot(x,GP,'gs--')
-    plt.plot(x,SC,'k+--')
-    plt.plot(x,FF,'bo--')
-    plt.plot(x,CG,'ro--')
+    plt.plot(x,GP,'gs--', markersize=MS)
+    #plt.plot(x,SC,'k+--', markersize=MS)
+    plt.plot(x,FF,'bo--', markersize=MS)
+    plt.plot(x,CG,'ro--', markersize=MS)
     #plt.plot(x,HM,'ro--')
     #plt.xticks(x,[str(label) for label in nList], rotation='horizontal', fontsize=30)
-    plt.xticks(x,["$2^"+"{" + str(i)+ "}"+ "$" for i in range(two_L, two_U)], rotation='horizontal', fontsize=30)
-    plt.yticks(fontsize=30)
+    plt.xticks(x,["$2^"+"{" + str(i)+ "}"+ "$" for i in range(two_L, two_U)], rotation='horizontal', fontsize=FS)
+    plt.yticks(fontsize=FS)
     #ax.xticks(y,rotation='horizontal', fontsize=20)
-    plt.legend(('GP','SC', 'F$^3$', 'CG'), fontsize=45, loc='upper left')
-    plt.title('Anchors: %s,  Samples: %s'%(str(r), str(m)), fontsize=50)
-    plt.xlabel('Dimension of data', fontsize=45)
-    plt.ylabel('Running times (seconds)', fontsize=45)
+    #plt.legend(('GP','SC', 'CountGauss', 'CountSketch'), fontsize=45, loc='upper left')
+    plt.legend(('GP','CountGauss', 'CountSketch'), fontsize=FS, loc='upper left')
+    plt.title('Anchors:  %s,  Samples: %s'%(str(r), str(m)), fontsize=FS)
+    plt.xlabel('Dimension of data', fontsize=FS)
+    plt.ylabel('Running times (seconds)', fontsize=FS)
+    plt.gcf().subplots_adjust(bottom=0.15)
     plt.show(True)
+
     #plt.savefig('comp_GP_FF.png')
     #plt.savefig('figures/fcube_GP_SC.pdf',transparent=False, bbox_inches='tight', pad_inches=0)

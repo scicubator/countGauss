@@ -182,7 +182,7 @@ def test_breast(filename, plot_func, q_max=11, compute_qr_until=11,
 
 
 if __name__ == '__main__':
-    plt.switch_backend('TkAgg')  # otherwise, monospace fonts do not work in mac
+    #plt.switch_backend('TkAgg')  # otherwise, monospace fonts do not work in mac
     test_breast('log_brca3226', plt.plot, only_draw=False)
     #test_climate('air_mon', plt.plot, only_draw=False)
 
