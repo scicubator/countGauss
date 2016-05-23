@@ -2,12 +2,8 @@ from __future__ import division
 import numpy as np
 import scipy.sparse
 
-def shift_bit_length(x):
-    return 1<<(x-1).bit_length()
-
-# Project the columns of the matrix M into the
-# lower dimension new_dim using gaussian
 def sign_projection(M, new_dim, seed=23):
+    """Project the columns of the matrix M into the  lower dimension new_dim using gaussian """
     #np.random.seed(seed=seed)
     np.random.seed()
     m, old_dim = np.shape(M)
@@ -24,9 +20,8 @@ def sign_projection(M, new_dim, seed=23):
 
     return M_red/np.sqrt(new_dim)
 
-# Project the columns of the matrix M into the
-# lower dimension new_dim using gaussian
 def gauss_projection(M, new_dim, G=None, seed=23):
+    """ Project the columns of the matrix M into the lower dimension new_dim using gaussian"""
     #np.random.seed(seed=seed)
     np.random.seed()
     m, old_dim = np.shape(M)
@@ -45,9 +40,8 @@ def gauss_projection(M, new_dim, G=None, seed=23):
 
     return M_red/np.sqrt(new_dim)
 
-# Project the columns of the matrix M into the
-# lower dimension new_dim using count sketch
 def countSketch_projection(M, new_dim, seed=23):
+    """ Project the columns of the matrix M into the lower dimension new_dim using count sketch"""
     np.random.seed()
     m,old_dim = np.shape(M)
 
@@ -66,9 +60,8 @@ def countSketch_projection(M, new_dim, seed=23):
     M_red = scipy.sparse.csr_matrix.dot(S,M.T).T
     return M_red
 
-# Project the columns of the matrix M into the
-# lower dimension new_dim using count sketch + gaussian algorithm
 def countGauss_projection(M, new_dim, seed=23):
+    """ Project the columns of the matrix M into the lower dimension new_dim using count sketch + gaussian algorithm"""
     np.random.seed()
     m,old_dim = np.shape(M)
 
