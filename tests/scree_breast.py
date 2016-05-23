@@ -7,7 +7,7 @@ from time import time
 import pylab as plt
 from lshash import LSHash
 from collections import Counter
-from fcube.fcube import fcube_projection, countGauss_projection, countSketch_projection
+from fcube.fcube import countGauss_projection, countSketch_projection
 
 def gauss_sim(X,k,maxiter=10, alg='gauss'):
     m,n  = np.shape(X)
