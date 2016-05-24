@@ -105,16 +105,4 @@ if __name__ == '__main__':
                 print "noise, runs", iT,run
     import ipdb
     ipdb.set_trace()
-    x = range(two_U-two_L)
 
-    plt.ion()
-    plt.plot(x,FF,'bo--')
-    plt.plot(x,GP,'gs--')
-    plt.plot(x,HH,'ro--')
-    plt.xticks(x,[str(label) for label in rList],rotation='horizontal', fontsize=20)
-    plt.legend(('FastFood','Gaussian', 'Hashing'), fontsize=22)
-    plt.title('Number of Anchors and Samples are %s, %s'%(str(r), str(m)), fontsize=25)
-    plt.xlabel('Dimension of data', fontsize=22)
-    plt.ylabel('Running times', fontsize=22)
-    plt.show(True)
-    #plt.savefig('comp_GP_FF.png')
