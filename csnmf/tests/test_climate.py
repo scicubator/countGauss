@@ -23,10 +23,7 @@ def run(mat, ncols, blockshape, compute_qr_until):
 
     algorithms = ['SPA', 'XRAY']
     compress = [False, True]
-<<<<<<< HEAD
     #data_list = [mat, da.from_array(mat, blockshape=blockshape)]
-=======
->>>>>>> 8d20e4c9e08fbe9ad5e03aec8e5b9ec957d1a54f
     data_list = [mat, da.from_array(mat, chunks=blockshape)]
 
     base_str = 'algorithm: {alg:4s}; compressed: {comp:d}; ' \
@@ -38,7 +35,7 @@ def run(mat, ncols, blockshape, compute_qr_until):
         if isinstance(data, np.ndarray):
             dtype = 'in-core'
         elif isinstance(data, da.Array):
-            dtype = 'out-of-core'
+            dtype = 'out-core'
 
         if not comp and ncols > compute_qr_until:
             res_dict = {'alg': alg, 'comp': comp, 'data_type': dtype,
@@ -69,14 +66,14 @@ def plot(x, dict_res, plot_func):
     for (alg, dtype) in dict_res.keys():
         for comp in dict_res[(alg, dtype)]:
             if len(alg) < 4:
-                label = '{0:4s}'.format(alg.upper()) + ' - '
+                label = '{0:4s}'.format(alg.upper()) + '-'
             else:
-                label = '{0:4s}'.format(alg.upper()) + ' - '
+                label = '{0:4s}'.format(alg.upper()) + '-'
             if comp:
-                label += '{0:5s} - '.format('comp.')
+                label += '{0:5s}-'.format('comp.')
                 linestyle = '-'
             else:
-                label += '{0:5s} - '.format('QR')
+                label += '{0:5s}-'.format('QR')
                 linestyle = '--'
             label += dtype
 
@@ -124,21 +121,29 @@ def test_climate(filename, plot_func, q_max=11, compute_qr_until=11,
                 time_vecs[key][res['comp']][i] = res['time']
                 err_vecs[key][res['comp']][i] = res['error']
 
-        with open(test_name, 'w') as f:
+        with open("figures/"+test_name+"time", 'w') as f:
             pickle.dump(time_vecs, f)
+        with open("figures/"+test_name+"err", "w") as f:
             pickle.dump(err_vecs, f)
 
-    with open(test_name, 'r') as f:
+    with open("figures/"+test_name+"time", 'r') as f:
         time_vecs = pickle.load(f)
+    with open("figures/"+test_name+"err", 'r') as f:
         err_vecs = pickle.load(f)
+
+
+    import matplotlib
+    matplotlib.rcParams.update({'font.size': 18})
+    matplotlib.rc('xtick', labelsize=25)
+    matplotlib.rc('ytick', labelsize=25)
 
     plt.figure(figsize=(10, 5))
     plot(q_list, time_vecs, plot_func)
     ax = plt.axes()
     ax.set_xticks(q_list)
     ax.set_xticklabels(q_list)
-    ax.set_xlabel('Number of extracted columns')
-    ax.set_ylabel('Time (s)')
+    #ax.set_xlabel('Number of extracted columns', fontsize=25)
+    ax.set_ylabel('Time (s)', fontsize=25)
 
     box = ax.get_position()
     ax.set_position([box.x0, box.y0, box.width * 0.55, box.height])
@@ -147,15 +152,15 @@ def test_climate(filename, plot_func, q_max=11, compute_qr_until=11,
     ax.legend(loc='center left', bbox_to_anchor=(1, 0.5),
               prop={'family': 'monospace'})
 
-    plt.savefig(test_name + '_time.pdf')
+    plt.savefig("figures/"+test_name + '_time_new.pdf')
 
     plt.figure(figsize=(10, 5))
     plot(q_list, err_vecs, plt.plot)
     ax = plt.axes()
     ax.set_xticks(q_list)
     ax.set_xticklabels(q_list)
-    ax.set_xlabel('Number of extracted columns')
-    ax.set_ylabel('Relative error')
+    #ax.set_xlabel('Number of extracted columns', fontsize=25)
+    ax.set_ylabel('Relative error', fontsize=25)
 
     box = ax.get_position()
     ax.set_position([box.x0, box.y0, box.width * 0.55, box.height])
@@ -164,12 +169,12 @@ def test_climate(filename, plot_func, q_max=11, compute_qr_until=11,
     # ax.legend(loc='center left', bbox_to_anchor=(1, 0.5),
     #           prop={'family': 'monospace'})
 
-    plt.savefig(test_name + '_error.pdf')
+    plt.savefig("figures/"+test_name + '_error_new.pdf')
 
 
 if __name__ == '__main__':
     plt.switch_backend('TkAgg')  # otherwise, monospace fonts do not work in mac
-    test_climate('air_mon', plt.plot, only_draw=False)
+    test_climate('air_mon', plt.plot, only_draw=True)
     #test_climate('air_day', plt.semilogy, q_max=11, compute_qr_until=2,
     #             only_draw=False)
     plt.show()

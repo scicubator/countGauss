@@ -13,7 +13,7 @@ from dask.array import from_array
 import timeit
 import matplotlib.pyplot as plt
 import csnmf.compression as randcomp
-from fcube.fcube import fcube_projection, mic_projection
+from fcube.fcube import countGauss_projection
 
 
 def select_blocksize(k):

@@ -11,7 +11,7 @@ from __future__ import absolute_import, print_function
 import numpy as np
 import dask.array as da
 import csnmf.tsqr
-from fcube.fcube import fcube_projection, mic_projection
+from fcube.fcube import countGauss_projection, countSketch_projection
 
 def compression_level(n, q):
     return min(max(20, q + 10), n)
@@ -27,7 +27,8 @@ def _inner_compress(data, omega, n_power_iter=0, qr=np.linalg.qr):
 
 def _our_compress(data, comp_level):
      seed = np.random.randint(1000)
-     M    = fcube_projection(data.T, comp_level, seed=seed)
+     #M    = fcube_projection(data.T, comp_level, seed=seed)
+     M    = countGauss_projection(data.T, comp_level)
      tmp  = 0
      return M.T, tmp
 
