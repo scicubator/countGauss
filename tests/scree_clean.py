@@ -4,24 +4,21 @@ from time import time
 import pylab as plt
 from collections import Counter
 from fcube.fcube import countGauss_projection, countSketch_projection
+import pickle
 
-def gauss_sim(X,k,maxiter=10, alg='gauss'):
+def gauss_sim(X,k,alg='gauss'):
     m,n  = np.shape(X)
     idxT = Counter()
-    for iT in range(maxiter):
-        if alg == 'gauss':
-            G    = np.random.randn(n,k)
-            Z    = np.dot(X,G)
-        if alg == 'countGauss':
-            Z    = countGauss_projection(X,k)
-        if alg != 'hash':
-            indMax  = np.argmax(Z,axis=0)
-            idxT.update(indMax)
-            indMin  = np.argmin(Z,axis=0)
-            idxT.update(indMin)
-        #print idxT
+    if alg == 'gauss':
+        G    = np.random.randn(n,k)
+        Z    = np.dot(X,G)
+    if alg == 'countGauss':
+        Z    = countGauss_projection(X,k)
+    indMax  = np.argmax(Z,axis=0)
+    idxT.update(indMax)
+    indMin  = np.argmin(Z,axis=0)
+    idxT.update(indMin)
     return sorted([k for k,v in idxT.most_common(k)])
-    #return idxT
 
 
 def gen_data(m,n,r):
@@ -38,13 +35,8 @@ def compute_sol(nList, maxiter, alg='gauss'):
     for iT, r in enumerate(nList):
        for iC,citer in enumerate(maxiter):
            for run in range(R):
-                #alg   =  'fastfood'
                 X,U,V = gen_data(m,n,r)
-
-                t0  = time()
-                I   =  gauss_sim(X,r,citer,alg=alg)
-                #I   =  gauss_sim(X,r,citer,alg='gauss')
-                dur = time() - t0
+                I   =  gauss_sim(X, int(r*citer),alg=alg)
                 if set(I)==set(range(r)):
                    succ[iT,iC]+=1
                 print "rank, projections, runs", iT,iC,run
@@ -54,14 +46,10 @@ def compute_sol(nList, maxiter, alg='gauss'):
 if __name__ == '__main__':
     m   =  500
     n   =  1000
-    maxiter = 4
 
-    nList  = range(5,50,2)
-    maxiter= range(1,5)
+    nList  = range(5,50,1)
+    maxiter= [0.1*x+1 for x in np.arange(50)]
     R      = 100
-    #nList  = range(5,50,2)
-    #maxiter= range(1,5)
-    #R      = 200
 
     succ  = compute_sol(nList, maxiter, alg='gauss')
     succG = compute_sol(nList, maxiter, alg='countGauss')
@@ -79,6 +67,12 @@ if __name__ == '__main__':
     major_ticks = np.arange(5,50,5)
     ax.set_xticks(major_ticks)
     plt.imshow(succG.T, cmap='gray_r', origin="lower")
+
+    D={}
+    D['gauss'] = succ
+    D['countGauss'] = succG
+    pickle.dump(D, open("tests/clean.pkl","wb"))
+
     import ipdb
     ipdb.set_trace()
 

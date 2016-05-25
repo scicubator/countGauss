@@ -1,11 +1,7 @@
 from __future__ import division
 import numpy as np
-#from fht import fht,fht2
-#import scipy.linalg
 from time import time
-#from anchor_new import fwht_spiral
 import pylab as plt
-from lshash import LSHash
 from collections import Counter
 from fcube.fcube import countGauss_projection, countSketch_projection
 
