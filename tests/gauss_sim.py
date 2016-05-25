@@ -1,10 +1,7 @@
 from __future__ import division
 import numpy as np
-from fht import fht
-from time import time
 import pylab as plt
 #import seaborn as sns
-from lshash import LSHash
 from csnmf.third_party.mrnmf.nmf_process_algorithms import xray,spa
 from csnmf.compression import compress
 from fcube.fcube import countGauss_projection, countSketch_projection
@@ -20,19 +17,10 @@ def gauss_sim(X,k,maxiter=10, alg='gauss'):
             Z    = countGauss_projection(X,k)
         if alg == 'countSketch':
             Z    = countSketch_projection(X,k)
-        if alg == 'hash':
-            if iT == 0:
-                lsh  = LSHash(20,n)
-                for j in range(m):
-                    lsh.index(X[j])
-                Z = np.random.rand(m,k)
-            for k in range(k):
-                lsh.query(np.random.rand(n),num_results=1,distance_func='euclidean')
-        if alg != 'hash':
-            ind  = np.argmax(Z,axis=0)
-            Idx  = set(ind).union(Idx)
-            ind  = np.argmin(Z,axis=0)
-            Idx  = set(ind).union(Idx)
+        ind  = np.argmax(Z,axis=0)
+        Idx  = set(ind).union(Idx)
+        ind  = np.argmin(Z,axis=0)
+        Idx  = set(ind).union(Idx)
         #print Idx
     return Idx
 
