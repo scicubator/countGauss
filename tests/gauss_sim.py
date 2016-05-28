@@ -5,10 +5,10 @@ import timeit
 from fcube.fcube import countGauss_projection, countSketch_projection
 
 
-def gauss_sim(X,k,maxiter=10, alg='gauss'):
+def gauss_sim(X, k, maxiter=10, alg='gauss'):
     m, n = np.shape(X)
-    Idx = set()
-    for iT in range(maxiter):
+    idx = set()
+    for _ in range(maxiter):
         if alg == 'gauss':
             G = np.random.randn(n, k)
             Z = np.dot(X, G)
@@ -17,11 +17,12 @@ def gauss_sim(X,k,maxiter=10, alg='gauss'):
         if alg == 'countSketch':
             Z = countSketch_projection(X, k)
         ind = np.argmax(Z, axis=0)
-        Idx = set(ind).union(Idx)
+        idx = set(ind).union(idx)
         ind = np.argmin(Z, axis=0)
-        Idx = set(ind).union(Idx)
+        idx = set(ind).union(idx)
+        # idx = idx.union(np.argmax(Z, axis=0), np.argmin(Z, axis=0))
         # print Idx
-    return Idx
+    return idx
 
 
 if __name__ == '__main__':
@@ -33,15 +34,16 @@ if __name__ == '__main__':
     # n   =  4096
     two_L = 8
     two_U = 18
-    FF = np.zeros(len(range(two_L, two_U)))
-    GP = np.zeros(len(range(two_L, two_U)))
-    HM = np.zeros(len(range(two_L, two_U)))
-    SP = np.zeros(len(range(two_L, two_U)))
-    XR = np.zeros(len(range(two_L, two_U)))
-    SC = np.zeros(len(range(two_L, two_U)))
-    CG = np.zeros(len(range(two_L, two_U)))
+    range_L_U = range(two_L, two_U)
+    FF = np.zeros(len(range_L_U))
+    GP = np.zeros(len(range_L_U))
+    HM = np.zeros(len(range_L_U))
+    SP = np.zeros(len(range_L_U))
+    XR = np.zeros(len(range_L_U))
+    SC = np.zeros(len(range_L_U))
+    CG = np.zeros(len(range_L_U))
 
-    nList = [np.power(2,i) for i in range(two_L,two_U)]
+    nList = [np.power(2, i) for i in range_L_U]
     for iT, n in enumerate(nList):
         U = np.random.rand(m, r)
         V = np.random.rand(r, n)
@@ -88,7 +90,7 @@ if __name__ == '__main__':
         # print "XRAY took", dur, " seconds \n"
 
     x = range(two_U - two_L)
-    y = ['$2^' + str(i) + '$' for i in range(two_L, two_U)]
+    y = ['$2^' + str(i) + '$' for i in range_L_U]
 
     FS = 60
     MS = 30
@@ -100,8 +102,7 @@ if __name__ == '__main__':
     # plt.plot(x, HM, 'ro--')
     # plt.xticks(x, [str(label) for label in nList], rotation='horizontal',
     #            fontsize=30)
-    plt.xticks(x,
-               ["$2^" + "{" + str(i) + "}" + "$" for i in range(two_L, two_U)],
+    plt.xticks(x, ["$2^" + "{" + str(i) + "}" + "$" for i in range_L_U],
                rotation='horizontal', fontsize=FS)
     plt.yticks(fontsize=FS)
     # ax.xticks(y,rotation='horizontal', fontsize=20)

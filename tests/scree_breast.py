@@ -10,7 +10,7 @@ from fcube.fcube import countGauss_projection
 def gauss_sim(X, k, maxiter=10, alg='gauss'):
     m, n = np.shape(X)
     idxT = Counter()
-    for iT in range(maxiter):
+    for _ in range(maxiter):
         if alg == 'gauss':
             G = np.random.randn(n, k)
             Z = np.dot(X, G)
@@ -48,7 +48,7 @@ def run_nmf(X, r, maxiter, alg):
     V = np.copy(X[I])
     print iT, np.shape(X), np.shape(U), np.shape(V)
     print I
-    for p in range(100):
+    for _ in range(100):
         U = U * (np.dot(X, V.T) / (np.dot(U, np.dot(V, V.T)) + 1e-9))
     Obj = np.linalg.norm(X - np.dot(U, V), 'fro') / np.linalg.norm(X, 'fro')
     return Obj, I, U, V
