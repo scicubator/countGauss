@@ -101,7 +101,6 @@ def nnls_frob(x, cols):
     :type cols: list of int
     :return: The matrix H and the relative residual.
     """
-
     ncols = x.shape[1]
     x_sel = x[:, cols]
     H = np.zeros((len(cols), ncols))
@@ -131,7 +130,6 @@ def select_columns(data, alg, r, colnorms=None):
     :type colnorms: numpy.ndarray
     :return The selected columns, the matrix H, and the relative residual.
     """
-
     if alg == 'XRAY':
         cols = xray(data, r)
     elif alg == 'SPA':

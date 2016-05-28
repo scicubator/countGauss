@@ -1,18 +1,10 @@
-"""
-   Copyright (c) 2015, Mariano Tepper, Duke University.
-   All rights reserved.
-
-   This file is part of RCNMF and is under the BSD 3-Clause License,
-   which can be found in the LICENSE file in the root directory, or at
-   http://opensource.org/licenses/BSD-3-Clause
-"""
-
 from __future__ import absolute_import, print_function
 import numpy as np
 import dask.array as da
 from csnmf.third_party import mrnmf
 import csnmf.compression
 import csnmf.tsqr
+
 
 def _compute_colnorms(data):
     """

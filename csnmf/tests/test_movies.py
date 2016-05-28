@@ -1,12 +1,3 @@
-"""
-   Copyright (c) 2015, Mariano Tepper, Duke University.
-   All rights reserved.
-
-   This file is part of RCNMF and is under the BSD 3-Clause License,
-   which can be found in the LICENSE file in the root directory, or at
-   http://opensource.org/licenses/BSD-3-Clause
-"""
-
 from __future__ import print_function
 from operator import mul, sub
 import h5py
@@ -15,9 +6,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 import cv2
-from into import into
-#from dask.array.into import discover
-#from dask.array import Array
 import dask.array as da
 import math
 import csnmf.snmf
@@ -30,7 +18,6 @@ def test_movie(hdf_filename, base_output_name, ncols=None, interval=None,
 
     f = h5py.File(hdf_filename, 'r')
     img_shape = np.array(f['img_shape'], dtype=np.int)
-    #f.close()
 
     m = min(max_blockshape[0], reduce(mul, img_shape))
     if interval is not None:
@@ -39,9 +26,7 @@ def test_movie(hdf_filename, base_output_name, ncols=None, interval=None,
         n = max_blockshape[1]
     m = int(m)
     n = int(n)
-    #data = into(Array, hdf_filename + '::/data', blockshape=(m, n))
-    #data = into(Array, f['data'], blockshape=(m, n))
-    data  = da.from_array(f['data'],chunks=(m,n))
+    data = da.from_array(f['data'], chunks=(m,n))
     if interval is not None:
         data = data[:, interval[0]:interval[1]]
         data = np.array(data.compute())

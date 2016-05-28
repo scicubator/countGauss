@@ -1,14 +1,6 @@
-"""
-   Copyright (c) 2015, Mariano Tepper, Duke University.
-   All rights reserved.
-
-   This file is part of RCNMF and is under the BSD 3-Clause License,
-   which can be found in the LICENSE file in the root directory, or at
-   http://opensource.org/licenses/BSD-3-Clause
-"""
 from __future__ import absolute_import
 import numpy as np
-from itertools import count, product
+from itertools import count
 import dask.array as da
 import operator
 
@@ -47,7 +39,7 @@ def qr(data, name=None):
     """
     if not (data.ndim == 2 and                    # Is a matrix
             len(data.chunks[1]) == 1):         # Only one column block
-            #len(data.blockdims[1]) == 1):         # Only one column block
+            # len(data.blockdims[1]) == 1):         # Only one column block
         raise ValueError(
             "Input must have the following properites:\n"
             "  1. Have two dimensions\n"
@@ -58,7 +50,7 @@ def qr(data, name=None):
 
     m, n = data.shape
     numblocks = (len(data.chunks[0]), 1)
-    #numblocks = (len(data.blockdims[0]), 1)
+    # numblocks = (len(data.blockdims[0]), 1)
 
     name_qr_st1 = prefix + 'QR_st1'
     dsk_qr_st1 = da.core.top(np.linalg.qr, name_qr_st1, 'ij', data.name, 'ij',
@@ -89,7 +81,7 @@ def qr(data, name=None):
     dsk_q_st2_aux = {(name_q_st2_aux, 0, 0): (operator.getitem,
                                               (name_qr_st2, 0, 0), 0)}
     q2_block_sizes = [min(e, n) for e in data.chunks[0]]
-    #q2_block_sizes = [min(e, n) for e in data.blockdims[0]]
+    # q2_block_sizes = [min(e, n) for e in data.blockdims[0]]
     block_slices = [(slice(e[0], e[1]), slice(0, n))
                     for e in _cumsum_blocks(q2_block_sizes)]
     name_q_st2 = prefix + 'Q_st2'
@@ -125,8 +117,8 @@ def qr(data, name=None):
     dsk_r.update(dsk_r_st2)
 
     q = da.Array(dsk_q, name_q_st3, shape=data.shape, chunks=data.chunks)
-    #q = da.Array(dsk_q, name_q_st3, shape=data.shape, blockdims=data.blockdims)
+    # q = da.Array(dsk_q, name_q_st3, shape=data.shape, blockdims=data.blockdims)
     r = da.Array(dsk_r, name_r_st2, shape=(n, n), chunks=(n, n))
-    #r = da.Array(dsk_r, name_r_st2, shape=(n, n), blockshape=(n, n))
+    # r = da.Array(dsk_r, name_r_st2, shape=(n, n), blockshape=(n, n))
 
     return q, r
