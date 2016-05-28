@@ -10,4 +10,6 @@ into
 h5py
 opencv
 
-Copyright (c) 2015 by Mariano Tepper, Duke University
+Copyright (c) 2016
+    Mariano Tepper, Duke University
+    Vamsi Krishna
